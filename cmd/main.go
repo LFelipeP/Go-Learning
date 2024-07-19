@@ -21,12 +21,15 @@ func main() {
 
 	//Repos
 	AccountRepository := repository.NewAccountRepository(dbConnection)
+	TransferRepository := repository.NewTransferRepository(dbConnection)
 
 	//Services
 	AccountService := service.NewAccountService(AccountRepository)
+	TransferService := service.NewTransferService(TransferRepository)
 
 	//Contorllers
 	AccountController := controller.NewAccountController(AccountService)
+	TransferController := controller.NewTransferController(TransferService)
 
 	server.GET("/ping", func(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{
@@ -35,6 +38,7 @@ func main() {
 	})
 
 	server.GET("/accounts", AccountController.GetAccounts)
+	server.GET("/transfers", TransferController.GetTransfers)
 
 	server.Run(":8000")
 }
